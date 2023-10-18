@@ -1,4 +1,4 @@
-import React, {Component, useRef} from "react";
+import React, {Component, useRef} from 'react';
 import {
   Animated,
   StyleSheet,
@@ -7,18 +7,24 @@ import {
   I18nManager,
   TouchableOpacity,
   Pressable,
-} from "react-native";
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 
-import {RectButton, Swipeable} from "react-native-gesture-handler";
-import {ActionButton, SwipeActionsButtonProps} from "./interfaces";
+import {RectButton, Swipeable} from 'react-native-gesture-handler';
+import {ActionButton, SwipeActionsButtonProps} from './interfaces';
+import styles from './swipe-actions-button.styles';
 
-const SwipeActions = ({
+const SwipeActionsButton = ({
   leftAction,
   rightActions,
   leftThreshold = 150,
   rightThreshold = 40,
-  rightActionsTotalWidthInPrecentages = "50%",
+  rightActionsTotalWidthInPrecentages = '50%',
   onPressButton,
+  onEndSwipeLeft,
+  style,
+
   ...props
 }: SwipeActionsButtonProps) => {
   let swipeableRow = useRef();
@@ -27,16 +33,14 @@ const SwipeActions = ({
       <RectButton
         style={{
           ...styles.leftAction,
-          ...(leftAction.backgroundColor
-            ? {backgroundColor: leftAction.backgroundColor}
-            : {}),
+
+          ...leftAction.buttonStyle,
         }}
         onPress={() => {
           leftAction.onPress && leftAction.onPress();
           close();
-        }}
-      >
-        <Animated.Text style={[styles.actionText]}>
+        }}>
+        <Animated.Text style={[styles.actionText, {...leftAction.textStyle}]}>
           {leftAction.name}
         </Animated.Text>
       </RectButton>
@@ -44,11 +48,12 @@ const SwipeActions = ({
   };
   const renderRightAction = ({
     text,
-    backColor,
-    textColor,
+
     onPress,
     x,
     progress,
+    buttonStyle,
+    textStyle,
   }: {
     text?: string;
     backColor?: string;
@@ -56,6 +61,8 @@ const SwipeActions = ({
     onPress?: () => void;
     x: any;
     progress: any;
+    buttonStyle?: ViewStyle;
+    textStyle: TextStyle;
   }) => {
     const trans = progress.interpolate({
       inputRange: [0, 1],
@@ -67,45 +74,37 @@ const SwipeActions = ({
         <RectButton
           style={{
             ...styles.rightAction,
-            ...(backColor ? {backgroundColor: backColor} : {}),
+            ...buttonStyle,
           }}
           onPress={() => {
             onPress && onPress();
             close();
-          }}
-        >
-          <Text
-            style={{
-              ...styles.actionText,
-              ...(textColor ? {color: textColor} : {}),
-            }}
-          >
-            {text}
-          </Text>
+          }}>
+          <Text style={[{...styles.actionText}, {...textStyle}]}>{text}</Text>
         </RectButton>
       </Animated.View>
     );
   };
-  const renderRightActions = (progress) => (
+  const renderRightActions = progress => (
     <View
       style={{
         width: rightActionsTotalWidthInPrecentages,
-        flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
-      }}
-    >
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+      }}>
       {rightActions.map((action: ActionButton) =>
         renderRightAction({
           text: action.name,
-          backColor: action.backgroundColor,
-          textColor: action.textColor,
+
           onPress: action.onPress,
           x: 0,
           progress,
-        })
+          buttonStyle: action.buttonStyle,
+          textStyle: action.textStyle,
+        }),
       )}
     </View>
   );
-  const updateRef = (ref) => {
+  const updateRef = ref => {
     swipeableRow = ref;
   };
   const close = () => {
@@ -114,41 +113,26 @@ const SwipeActions = ({
 
   return (
     <Pressable
+      style={style ? style : {}}
       onPress={() => {
         onPressButton && onPressButton();
-      }}
-    >
+      }}>
       <Swipeable
         ref={updateRef}
         friction={2}
         leftThreshold={leftThreshold}
         rightThreshold={rightThreshold}
+        onSwipeableOpen={direction => {
+          if (direction === 'left') {
+            onEndSwipeLeft && onEndSwipeLeft();
+          }
+        }}
         renderLeftActions={renderLeftActions}
-        renderRightActions={renderRightActions}
-      >
+        renderRightActions={renderRightActions}>
         {props.children}
       </Swipeable>
     </Pressable>
   );
 };
 
-export default SwipeActions;
-
-const styles = StyleSheet.create({
-  leftAction: {
-    flex: 1,
-    backgroundColor: "red",
-    justifyContent: "center",
-  },
-  actionText: {
-    color: "white",
-    fontSize: 16,
-    backgroundColor: "transparent",
-    padding: 10,
-  },
-  rightAction: {
-    alignItems: "center",
-    flex: 1,
-    justifyContent: "center",
-  },
-});
+export default SwipeActionsButton;

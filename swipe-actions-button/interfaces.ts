@@ -1,8 +1,10 @@
+import {TextStyle, ViewStyle} from 'react-native';
+
 type ActionButton = {
   name: string;
-  textColor: string;
-  backgroundColor?: string;
   onPress?: () => void;
+  buttonStyle?: ViewStyle;
+  textStyle: TextStyle;
 };
 type SwipeActionsButtonProps = {
   rightActions: ActionButton[];
@@ -11,6 +13,8 @@ type SwipeActionsButtonProps = {
   rightThreshold: number;
   rightActionsTotalWidthInPrecentages?: string;
   onPressButton?: () => void;
+  onEndSwipeLeft?: () => void;
+  style?: ViewStyle;
 };
 
 export {ActionButton, SwipeActionsButtonProps};
