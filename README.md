@@ -5,10 +5,10 @@
 
 # Example:
 
-![ ](./assets/videos/example.gif)
+![](./assets/videos/example.gif)
 
-![ ](./assets/images/ex1.png)
-![ ](./assets/images/ex2.png)
+![](./assets/images/example.png)
+![](./assets/images/example2.png)
 
 ## ActionButton props
 

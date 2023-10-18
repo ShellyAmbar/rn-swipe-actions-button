@@ -1,6 +1,6 @@
 {
   "name": "rn-swipe-actions-button",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "A dynamic swipeable view with both left and right actions, revealing the actions with animation.",
   "main": "swipe-actions-button/swipe-actions-button.tsx",
   "scripts": {
