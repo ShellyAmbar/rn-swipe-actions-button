@@ -1,0 +1,22 @@
+{
+  "name": "rn-swipe-actions",
+  "version": "1.0.0",
+  "description": "A dynamic swipable view with both left and right actions, revealing the actions with animation.",
+  "main": "swipe-actions-button/swipe-actions-button.tsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "swipe",
+    "button",
+    "swipable",
+    "actions"
+  ],
+  "peerDependencies": {
+    "react": "18.2.0",
+    "react-native": "0.72.3",
+    "react-native-gesture-handler": "^2.13.1"
+  },
+  "author": "Shelly Ambar",
+  "license": "ISC"
+}
